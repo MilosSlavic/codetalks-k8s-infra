@@ -29,6 +29,8 @@ resource "helm_release" "istio-ingress" {
   verify     = false
   wait       = true
 
+  values = ["${file("${path.module}/values.yaml")}"]
+
   depends_on = [
     kubernetes_namespace.namespace
   ]
@@ -36,7 +38,7 @@ resource "helm_release" "istio-ingress" {
 
 data "kubernetes_service" "lb" {
   metadata {
-    name = var.release_name
+    name      = var.release_name
     namespace = var.namespace
   }
 
