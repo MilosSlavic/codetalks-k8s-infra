@@ -64,3 +64,9 @@ module "istio-ingressgateway" {
 module "fluxcd" {
   source = "./flux"
 }
+
+module "prometheus" {
+  source = "./prometheus"
+
+  istio_ns = "istio-system"
+}
