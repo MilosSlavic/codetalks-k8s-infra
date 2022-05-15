@@ -10,10 +10,3 @@ $env:ARM_SUBSCRIPTION_ID = $SubscriptionId
 $env:ARM_TENANT_ID = $principal.tenant
 $env:TF_VAR_resource_group_name = "codetalks-rg"
 $env:TF_VAR_cluster_name = "codetalks-aks"
-
-# helm provider => aks kube_config or certificates or exec cmd to fetch from aks
-
-# kubernetes provider =>  aks kube_config or certificates or exec cmd to fetch from aks
-
-
-
