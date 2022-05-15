@@ -14,6 +14,13 @@ provider "kubernetes" {
   cluster_ca_certificate = base64decode(data.azurerm_kubernetes_cluster.default.kube_config.0.cluster_ca_certificate)
 }
 
+provider "kubectl" {
+  host                   = data.azurerm_kubernetes_cluster.default.kube_config.0.host
+  client_certificate     = base64decode(data.azurerm_kubernetes_cluster.default.kube_config.0.client_certificate)
+  client_key             = base64decode(data.azurerm_kubernetes_cluster.default.kube_config.0.client_key)
+  cluster_ca_certificate = base64decode(data.azurerm_kubernetes_cluster.default.kube_config.0.cluster_ca_certificate)
+}
+
 provider "helm" {
   kubernetes {
     host                   = data.azurerm_kubernetes_cluster.default.kube_config.0.host
@@ -52,4 +59,8 @@ module "istio-ingressgateway" {
   depends_on = [
     module.istio
   ]
+}
+
+module "fluxcd" {
+  source = "./flux"
 }
