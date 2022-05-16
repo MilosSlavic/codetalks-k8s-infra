@@ -76,3 +76,12 @@ module "grafana" {
 
   istio_ns = "istio-system"
 }
+
+module "kiali" {
+  source = "./kiali"
+
+  istio_ns = "istio-system"
+  depends_on = [
+    module.istio
+  ]
+}
