@@ -70,3 +70,9 @@ module "prometheus" {
 
   istio_ns = "istio-system"
 }
+
+module "grafana" {
+  source = "./grafana"
+
+  istio_ns = "istio-system"
+}

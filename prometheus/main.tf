@@ -17,7 +17,7 @@ locals {
 
 resource "kubernetes_config_map" "prometheus_cm" {
   data = {
-    "prometheus.yml"      = "${file("${path.module}/prometheus.yml")}"
+    "prometheus.yml" = "${file("${path.module}/prometheus.yml")}"
   }
   metadata {
     name      = local.name
@@ -210,7 +210,7 @@ resource "kubernetes_deployment" "deploy" {
         host_network = false
         dns_policy   = "ClusterFirst"
         security_context {
-          fs_group      = 65534
+          fs_group        = 65534
           run_as_group    = 65534
           run_as_non_root = true
           run_as_user     = 65534
