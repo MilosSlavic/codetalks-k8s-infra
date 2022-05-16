@@ -15,6 +15,7 @@ provider "kubernetes" {
 }
 
 provider "kubectl" {
+  load_config_file = false
   host                   = data.azurerm_kubernetes_cluster.default.kube_config.0.host
   client_certificate     = base64decode(data.azurerm_kubernetes_cluster.default.kube_config.0.client_certificate)
   client_key             = base64decode(data.azurerm_kubernetes_cluster.default.kube_config.0.client_key)
@@ -69,12 +70,18 @@ module "prometheus" {
   source = "./prometheus"
 
   istio_ns = "istio-system"
+  depends_on = [
+    module.istio
+  ]
 }
 
 module "grafana" {
   source = "./grafana"
 
   istio_ns = "istio-system"
+  depends_on = [
+    module.istio
+  ]
 }
 
 module "kiali" {
@@ -88,4 +95,8 @@ module "kiali" {
 
 module "keycloak" {
   source = "./keycloak"
+}
+
+module "efk" {
+  source = "./efk"
 }
