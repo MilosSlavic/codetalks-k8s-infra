@@ -125,7 +125,7 @@ resource "kubernetes_service" "jaeger_svc" {
     }
 
     port {
-      name        = "http-query"
+      name        = "http-query" #FRONTEND UI
       port        = 80
       protocol    = "TCP"
       target_port = 16686

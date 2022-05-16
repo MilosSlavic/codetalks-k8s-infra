@@ -39,6 +39,8 @@ resource "helm_release" "istiod" {
   verify     = false
   wait       = true
 
+  values = ["${file("${path.module}/values.yaml")}"]
+
   depends_on = [
     helm_release.istiobase
   ]
