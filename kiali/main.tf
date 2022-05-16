@@ -187,10 +187,10 @@ resource "kubernetes_role" "role_kiali_controlplane" {
   }
 
   rule {
-    api_groups        = [""]
+    api_groups     = [""]
     resource_names = ["cacerts", "istio-ca-secret"]
-    resources         = ["secrets"]
-    verbs             = ["get", "list", "watch"]
+    resources      = ["secrets"]
+    verbs          = ["get", "list", "watch"]
   }
 }
 

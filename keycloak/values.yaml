@@ -1,0 +1,16 @@
+auth:
+  createAdminUser: true
+  adminUser: admin
+  adminPassword: admin
+
+service:
+  type: ClusterIP
+
+metrics:
+  enabled: true
+
+postgresql:
+  auth:
+    username: admin
+    password: admin
+    database: keycloak

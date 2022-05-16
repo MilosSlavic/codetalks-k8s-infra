@@ -85,3 +85,7 @@ module "kiali" {
     module.istio
   ]
 }
+
+module "keycloak" {
+  source = "./keycloak"
+}
