@@ -15,7 +15,7 @@ provider "kubernetes" {
 }
 
 provider "kubectl" {
-  load_config_file = false
+  load_config_file       = false
   host                   = data.azurerm_kubernetes_cluster.default.kube_config.0.host
   client_certificate     = base64decode(data.azurerm_kubernetes_cluster.default.kube_config.0.client_certificate)
   client_key             = base64decode(data.azurerm_kubernetes_cluster.default.kube_config.0.client_key)
@@ -99,4 +99,12 @@ module "keycloak" {
 
 module "efk" {
   source = "./efk"
+}
+
+module "jaeger" {
+  source = "./jaeger"
+
+  depends_on = [
+    module.istio
+  ]
 }
