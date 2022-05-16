@@ -17,11 +17,7 @@ locals {
 
 resource "kubernetes_config_map" "prometheus_cm" {
   data = {
-    "alerting_rules.yml"  = "{}"
-    "alerts"              = "{}"
-    "prometheus.yml"      = "{${file("${path.module}/prometheus.yml")}}"
-    "recording_rules.yml" = "{}"
-    "rules"               = "{}"
+    "prometheus.yml"      = "${file("${path.module}/prometheus.yml")}"
   }
   metadata {
     name      = local.name
@@ -87,7 +83,7 @@ resource "kubernetes_cluster_role_binding" "crb" {
 
   subject {
     kind      = "ServiceAccount"
-    name      = local.sec_name
+    name      = local.name
     namespace = var.istio_ns
   }
 
@@ -142,7 +138,7 @@ resource "kubernetes_deployment" "deploy" {
         service_account_name = local.name
 
         container {
-          name              = prometheus-server-configmap-reload
+          name              = "prometheus-server-configmap-reload"
           image             = "jimmidyson/configmap-reload:v0.5.0"
           image_pull_policy = "IfNotPresent"
           args = [
@@ -157,9 +153,9 @@ resource "kubernetes_deployment" "deploy" {
         }
 
         container {
-          name                   = "prometheus-server"
-          image                  = "prom/prometheus:v2.31.1"
-          imageimage_pull_policy = "IfNotPresent"
+          name              = "prometheus-server"
+          image             = "prom/prometheus:v2.31.1"
+          image_pull_policy = "IfNotPresent"
           args = [
             "--storage.tsdb.retention.time=15d",
             "--config.file=/etc/config/prometheus.yml",
@@ -201,7 +197,7 @@ resource "kubernetes_deployment" "deploy" {
 
           volume_mount {
             name       = "config-volume"
-            mount_path = "/etc/confg"
+            mount_path = "/etc/config"
           }
 
           volume_mount {
@@ -214,7 +210,7 @@ resource "kubernetes_deployment" "deploy" {
         host_network = false
         dns_policy   = "ClusterFirst"
         security_context {
-          fsGroup         = 65534
+          fs_group      = 65534
           run_as_group    = 65534
           run_as_non_root = true
           run_as_user     = 65534
