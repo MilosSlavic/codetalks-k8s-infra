@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: auth
+  namespace: default
+stringData:
+  username: codetalksacr
+  password: "PN=tdosKjN9Ev5fXZPPeJ5pO3HJbdn5B"
+
+---
+
+apiVersion: source.toolkit.fluxcd.io/v1beta1
+kind: HelmRepository
+metadata:
+  name: acr-helmrepo
+  namespace: default
+spec:
+  interval: 1m
+  url: https://codetalksacr.azurecr.io/helm/v1/repo
+  secretRef:
+    name: auth
+

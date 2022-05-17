@@ -1,0 +1,36 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: knowledge
+  namespace: default
+spec:
+  interval: 2m
+  chart:
+    spec:
+      chart: knowledge
+      version: "1.0.x"
+      sourceRef:
+        kind: HelmRepository
+        name: acr-helmrepo
+        namespace: default
+      interval: 1m
+  values:
+    replicaCount: 1
+    imagePullSecrets:
+    - name: acr
+    podAnnotations:
+      sidecar.istio.io/userVolumeMount: '[{ "name": "proto-gen-vol", "mountPath": "/mnt/descriptor/", "readonly": true }]'
+      sidecar.istio.io/userVolume: '[{"name": "proto-gen-vol", "persistentVolumeClaim": { "claimName": "protopvc", "readonly": true }}]'
+    envFrom:
+      - configMapRef:
+          name: global
+      - configMapRef:
+          name: knowledge
+
+    resources:
+      limits:
+        cpu: 200m
+        memory: 512Mi
+      requests:
+        cpu: 100m
+        memory: 64Mi
