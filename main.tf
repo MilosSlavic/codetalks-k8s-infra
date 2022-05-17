@@ -7,6 +7,16 @@ data "azurerm_kubernetes_cluster" "default" {
   resource_group_name = var.resource_group_name
 }
 
+data "azurerm_storage_account" "proto_sa" {
+  name                = "codetalksprotostorage"
+  resource_group_name = "codetalks-proto"
+}
+
+data "azurerm_container_registry" "acr"{
+name                = "codetalksacr"
+  resource_group_name = "codetalks-rg"
+}
+
 provider "kubernetes" {
   host                   = data.azurerm_kubernetes_cluster.default.kube_config.0.host
   client_certificate     = base64decode(data.azurerm_kubernetes_cluster.default.kube_config.0.client_certificate)
@@ -95,6 +105,10 @@ module "kiali" {
 
 module "keycloak" {
   source = "./keycloak"
+
+  depends_on = [
+    module.istio
+  ]
 }
 
 module "efk" {
@@ -107,4 +121,48 @@ module "jaeger" {
   depends_on = [
     module.istio
   ]
+}
+
+module "mssql" {
+  source = "./mssql"
+
+  depends_on = [
+    module.istio
+  ]
+}
+
+module "appcfg" {
+  source = "./appcfg"
+
+  employeedb  = "Server=mssql;Database=EmployeeDb;User Id=sa;Password=P@ssw0rd"
+  knowledgedb = "Server=mssql;Database=KnowledgeDb;User Id=sa;Password=P@ssw0rd"
+}
+
+resource "kubernetes_secret" "image_pull_secret" {
+  metadata{
+    name = "acr"
+  }
+
+  type = "kubernetes.io/dockerconfigjson"
+
+  data = {
+    ".dockerconfigjson" = jsonencode({
+      auths ={
+        "codetalksacr.azurecr.io" = {
+          "username" = data.azurerm_container_registry.acr.admin_username
+          "passowrd" =data.azurerm_container_registry.acr.admin_password
+          "email" = "m@s.com"
+          "auth"     = base64encode("${data.azurerm_container_registry.acr.admin_username}:${data.azurerm_container_registry.acr.admin_password}")
+        }
+      }
+    })
+  }
+}
+
+module "protostorage"{
+  source = "./protostorage"
+
+  storage_account_name = data.azurerm_storage_account.proto_sa.name
+
+  storage_account_key = data.azurerm_storage_account.proto_sa.primary_access_key
 }

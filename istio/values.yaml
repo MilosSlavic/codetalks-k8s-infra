@@ -9,6 +9,6 @@ meshConfig:
       tlsSettings: ISTIO_MUTUAL
       sampling: 100.0
     tracingServiceName: zipkin
-  enableAutoMtls: true
-  outboundTrafficPolicy: 
-    mode: REGISTRY_ONLY
+  # enableAutoMtls: true
+  # outboundTrafficPolicy: 
+  #   mode: REGISTRY_ONLY

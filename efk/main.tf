@@ -28,7 +28,7 @@ resource "kubernetes_storage_class" "disk" {
 
   storage_provisioner = "disk.csi.azure.com"
   parameters = {
-    "skuName" = "Premium_LRS"
+    "skuName" = "Standard_LRS"
   }
   reclaim_policy         = "Retain"
   allow_volume_expansion = true
@@ -49,6 +49,9 @@ resource "kubernetes_persistent_volume_claim" "pvc" {
       }
     }
   }
+  depends_on = [
+    kubernetes_namespace.ns
+  ]
 }
 
 resource "kubernetes_deployment" "elasticsearch" {
@@ -123,6 +126,10 @@ resource "kubernetes_deployment" "elasticsearch" {
     }
 
   }
+
+  depends_on = [
+    kubernetes_namespace.ns
+  ]
 }
 
 resource "kubernetes_service" "elasticsearch" {
@@ -143,6 +150,10 @@ resource "kubernetes_service" "elasticsearch" {
       protocol    = "TCP"
     }
   }
+
+  depends_on = [
+    kubernetes_namespace.ns
+  ]
 }
 
 # kibana
@@ -206,6 +217,10 @@ resource "kubernetes_deployment" "kibana" {
       }
     }
   }
+
+  depends_on = [
+    kubernetes_namespace.ns
+  ]
 }
 
 resource "kubernetes_service" "kibana" {
@@ -229,6 +244,10 @@ resource "kubernetes_service" "kibana" {
       target_port = 5601
     }
   }
+
+  depends_on = [
+    kubernetes_namespace.ns
+  ]
 }
 
 # fluentbit
@@ -237,6 +256,10 @@ resource "kubernetes_service_account" "fluentbit_sa" {
     name      = local.fb_name
     namespace = local.namespace
   }
+
+  depends_on = [
+    kubernetes_namespace.ns
+  ]
 }
 
 resource "kubernetes_cluster_role" "fluentbit_cr" {
@@ -291,6 +314,10 @@ resource "kubernetes_config_map" "fluentbit_cm" {
     "output-elasticsearch.conf" = "${file("${path.module}/output-elasticsearch.conf")}"
     "parsers.conf"              = "${file("${path.module}/parsers.conf")}"
   }
+
+  depends_on = [
+    kubernetes_namespace.ns
+  ]
 }
 
 resource "kubernetes_daemonset" "fluentbit_daemonset" {
@@ -405,4 +432,8 @@ resource "kubernetes_daemonset" "fluentbit_daemonset" {
       }
     }
   }
+
+  depends_on = [
+    kubernetes_namespace.ns
+  ]
 }
