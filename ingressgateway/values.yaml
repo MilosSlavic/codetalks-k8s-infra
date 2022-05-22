@@ -16,3 +16,23 @@ service:
     port: 10000
     protocol: TCP
     targetPort: 10000
+  - name: kibana
+    port: 5601
+    protocol: TCP
+    targetPort: 5601
+  - name: keycloak
+    port: 20000
+    targetPort: 20000
+    protocol: TCP
+  - name: grafana
+    port: 3000
+    targetPort: 3000
+    protocol: TCP
+  - name: jaeger
+    port: 16686
+    targetPort: 16686
+    protocol: TCP
+  - name: kiali
+    port: 20001
+    targetPort: 20001
+    protocol: TCP

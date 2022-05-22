@@ -1,0 +1,45 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: apigateway
+  namespace: default
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "*"
+  - port:
+        number: 5601
+        name: kibana
+        protocol: HTTP
+    hosts:
+    - "*"
+  - port:
+      number: 20000
+      name: keycloak
+      protocol: HTTP
+    hosts:
+    - "*"
+  - port:
+      number: 3000
+      name: grafana
+      protocol: HTTP
+    hosts:
+    - "*"
+  - port:
+      number: 16686
+      name: jaeger
+      protocol: HTTP
+    hosts:
+    - "*"
+  - port:
+      number: 20001
+      name: kiali
+      protocol: HTTP
+    hosts:
+    - "*"
