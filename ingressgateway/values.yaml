@@ -36,3 +36,7 @@ service:
     port: 20001
     targetPort: 20001
     protocol: TCP
+  - name: mssql
+    port: 1433
+    targetPort: 1433
+    protocol: TCP

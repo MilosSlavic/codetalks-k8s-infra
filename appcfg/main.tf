@@ -17,8 +17,6 @@ resource "kubernetes_config_map" "global" {
     "ASPNETCORE_ENVIRONMENT"                                            = "Test"
     "Logging__LogLevel__Microsoft.EntityFrameworkCore.Database.Command" = "Error"
     "Serilog__MinimumLevel__Override__Microsoft.EntityFrameworkCore.Database.Command" : "Error"
-    "Kestrel__Endpoints__http__Url"                = "http://+:80"
-    "Kestrel__Endpoints__http__Protocols"          = "Http1"
     "Kestrel__Endpoints__grpc__Url"                = "http://+:90"
     "Kestrel__Endpoints__grpc__Protocols"          = "Http2"
     "ASPNETCORE_HOSTBUILDER__RELOADCONFIGONCHANGE" = "false"
@@ -56,7 +54,7 @@ resource "kubernetes_config_map" "employeesearchbff" {
   }
 
   data = {
-    "EMPLOYEE_GRPC_API"  = "http://employee.api:90/"
-    "KNOWLEDGE_GRPC_API" = "http://knowledge.api:90/"
+    "EMPLOYEE_GRPC_API"  = "http://employee:90/"
+    "KNOWLEDGE_GRPC_API" = "http://knowledge:90/"
   }
 }

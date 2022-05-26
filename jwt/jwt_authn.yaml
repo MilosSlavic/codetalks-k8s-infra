@@ -1,0 +1,22 @@
+apiVersion: security.istio.io/v1beta1
+kind: RequestAuthentication
+metadata:
+  name: jwt-authn
+  namespace: default
+spec:
+  jwtRules:
+  - issuer: keycloak
+    jwksUri: http://keycloak:8080/.well-know/openid-configuration/jwks
+
+---
+
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: required-jwt-on-all
+  namespace: default
+spec:
+  rules:
+  - from:
+    - source:
+        requestPrincipals: ["*"]
