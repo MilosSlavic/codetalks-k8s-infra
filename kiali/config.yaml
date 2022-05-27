@@ -63,9 +63,9 @@ external_services:
     url: http://${lb}:3000/
   tracing:
     enabled: true
-    in_cluster_url: http://tracing:16685/jaeger
-    use_grpc: true
-    url: http://${lb}:16685/jaeger
+    in_cluster_url: http://tracing:16686/jaeger
+    use_grpc: false
+    url: http://${lb}:16686/jaeger
 identity:
   cert_file: ""
   private_key_file: ""

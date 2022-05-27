@@ -1,12 +1,12 @@
 global:
   tracer:
     zipkin:
-      address: zipkin:9441
+      address: zipkin:9411
 
 meshConfig:
   defaultConfig:
     tracing:
-      tlsSettings: ISTIO_MUTUAL
+      # tlsSettings: ISTIO_MUTUAL
       sampling: 100.0
     tracingServiceName: zipkin
   # enableAutoMtls: true

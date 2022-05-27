@@ -12,7 +12,7 @@ spec:
       match:
       - port: 80
         uri:
-          prefix: /api/Employee
+          prefix: /api/Employee/
       route:
       - destination:
           host: employee
