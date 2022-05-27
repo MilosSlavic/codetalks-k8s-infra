@@ -126,7 +126,7 @@ resource "kubernetes_service" "jaeger_svc" {
 
     port {
       name        = "http-query" #FRONTEND UI
-      port        = 80
+      port        = 16686
       protocol    = "TCP"
       target_port = 16686
     }
@@ -155,7 +155,7 @@ resource "kubernetes_service" "zipkin_api" {
     }
 
     port {
-      port        = 9441
+      port        = 9411
       name        = "http-query"
       target_port = 9411
     }

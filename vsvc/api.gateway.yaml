@@ -33,7 +33,7 @@ spec:
     - "*"
   - port:
       number: 16686
-      name: jaeger
+      name: http-jaeger
       protocol: HTTP
     hosts:
     - "*"
