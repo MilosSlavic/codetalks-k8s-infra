@@ -12,8 +12,8 @@ data "azurerm_storage_account" "proto_sa" {
   resource_group_name = "codetalks-proto"
 }
 
-data "azurerm_container_registry" "acr"{
-name                = "codetalksacr"
+data "azurerm_container_registry" "acr" {
+  name                = "codetalksacr"
   resource_group_name = "codetalks-rg"
 }
 
@@ -98,8 +98,11 @@ module "kiali" {
   source = "./kiali"
 
   istio_ns = "istio-system"
+  lb       = module.istio-ingressgateway.lb_ip
+
   depends_on = [
-    module.istio
+    module.istio,
+    module.istio-ingressgateway
   ]
 }
 
@@ -139,7 +142,7 @@ module "appcfg" {
 }
 
 resource "kubernetes_secret" "image_pull_secret" {
-  metadata{
+  metadata {
     name = "acr"
   }
 
@@ -147,11 +150,11 @@ resource "kubernetes_secret" "image_pull_secret" {
 
   data = {
     ".dockerconfigjson" = jsonencode({
-      auths ={
+      auths = {
         "codetalksacr.azurecr.io" = {
           "username" = data.azurerm_container_registry.acr.admin_username
-          "passowrd" =data.azurerm_container_registry.acr.admin_password
-          "email" = "m@s.com"
+          "passowrd" = data.azurerm_container_registry.acr.admin_password
+          "email"    = "m@s.com"
           "auth"     = base64encode("${data.azurerm_container_registry.acr.admin_username}:${data.azurerm_container_registry.acr.admin_password}")
         }
       }
@@ -159,10 +162,17 @@ resource "kubernetes_secret" "image_pull_secret" {
   }
 }
 
-module "protostorage"{
+module "protostorage" {
   source = "./protostorage"
 
   storage_account_name = data.azurerm_storage_account.proto_sa.name
 
   storage_account_key = data.azurerm_storage_account.proto_sa.primary_access_key
+}
+
+module "deploy" {
+  source = "./deploy"
+
+  helm_username = data.azurerm_container_registry.acr.admin_username
+  helm_password = data.azurerm_container_registry.acr.admin_password
 }

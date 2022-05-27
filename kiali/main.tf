@@ -31,10 +31,9 @@ resource "kubernetes_config_map" "cm" {
   }
 
   data = {
-    "config.yaml" = "${file("${path.module}/config.yaml")}"
+    "config.yaml" = "${templatefile("${path.module}/config.yaml", { lb = var.lb } )}"
   }
 }
-
 
 resource "kubernetes_cluster_role" "cr_viewer" {
   metadata {
@@ -221,7 +220,7 @@ resource "kubernetes_service" "svc" {
     name      = local.name
     namespace = var.istio_ns
     labels = {
-      "app" = local.name
+      app = local.name
     }
   }
 
@@ -239,8 +238,7 @@ resource "kubernetes_service" "svc" {
     }
 
     selector = {
-      "name"    = local.name
-      namespace = var.istio_ns
+      app = "kiali"
     }
 
   }
@@ -305,7 +303,7 @@ resource "kubernetes_deployment" "deploy" {
           }
 
           port {
-            name           = "api-port"
+            name           = "http-apiport"
             container_port = 20001
           }
 
@@ -317,7 +315,7 @@ resource "kubernetes_deployment" "deploy" {
           readiness_probe {
             http_get {
               path   = "/kiali/healthz"
-              port   = "api-port"
+              port   = "http-apiport"
               scheme = "HTTP"
             }
             initial_delay_seconds = 5
@@ -327,7 +325,7 @@ resource "kubernetes_deployment" "deploy" {
           liveness_probe {
             http_get {
               path   = "/kiali/healthz"
-              port   = "api-port"
+              port   = "http-apiport"
               scheme = "HTTP"
             }
 

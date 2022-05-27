@@ -39,7 +39,13 @@ spec:
     - "*"
   - port:
       number: 20001
-      name: kiali
+      name: http-kiali
       protocol: HTTP
+    hosts:
+    - "*"
+  - port:
+      number: 1433
+      name: tcp-mssql
+      protocol: TCP
     hosts:
     - "*"

@@ -79,7 +79,7 @@ resource "kubernetes_deployment" "mssql_deploy" {
           port {
             container_port = 1433
             protocol       = "TCP"
-            name           = "mssql"
+            name           = "tcp"
           }
 
           env {
@@ -131,7 +131,7 @@ resource "kubernetes_service" "mssql_svc" {
       protocol    = "TCP"
       port        = 1433
       target_port = 1433
-      name        = "mssql"
+      name        = "tcp"
     }
   }
 }

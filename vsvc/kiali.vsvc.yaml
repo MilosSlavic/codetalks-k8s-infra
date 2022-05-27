@@ -16,3 +16,48 @@ spec:
           host: kiali.istio-system.svc.cluster.local
           port:
             number: 20001
+
+
+
+# ---
+
+# apiVersion: networking.istio.io/v1alpha3
+# kind: DestinationRule
+# metadata:
+#   name: kiali
+#   namespace: istio-system
+# spec:
+#   host: kiali
+#   trafficPolicy:
+#     tls:
+#       mode: DISABLE
+
+# ---
+# apiVersion: networking.istio.io/v1alpha3
+# kind: Gateway
+# metadata:
+#   name: kiali-gateway
+#   namespace: istio-system
+# spec:
+#   selector:
+#     istio: ingressgateway
+#   servers:
+#   - port:
+#       number: 20002
+#       name: http-kiali
+#       protocol: HTTP
+#     hosts:
+#     - "kiali.${INGRESS_DOMAIN}"
+# apiVersion: networking.istio.io/v1alpha3
+# kind: ServiceEntry
+# metadata:
+#   name: kiali-serviceentry
+# spec:
+#   hosts:
+#   - "kiali.istio-system"
+#   location: MESH_EXTERNAL
+#   ports:
+#   - number: 20001
+#     name: http
+#     protocol: HTTP
+#   resolution: STATIC

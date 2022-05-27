@@ -21,7 +21,7 @@ resource "kubernetes_secret" "proto_secret" {
 
 resource "kubernetes_persistent_volume" "proto_pv" {
   metadata {
-    name      = "protopv"
+    name = "protopv"
   }
 
   spec {
