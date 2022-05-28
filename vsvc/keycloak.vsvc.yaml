@@ -9,10 +9,14 @@ spec:
   - "apigateway"
   http:
     - name: keycloak
+      headers:
+        request:
+          set:
+            "X-Forwarded-Port": "20000"
       match:
       - port: 20000
       route:
       - destination:
-          host: keycloak.default
+          host: keycloak.default.svc.cluster.local
           port:
-            number: 8080
+            number: 80
